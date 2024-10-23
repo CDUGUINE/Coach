@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtTaille;
     private EditText txtAge;
     private RadioButton rdHomme;
+    private RadioButton rdFemme;
     private TextView lblIMG;
     private ImageView imgSmiley;
     private Button btnCalc;
@@ -49,13 +50,18 @@ public class MainActivity extends AppCompatActivity {
         txtTaille = (EditText) findViewById(R.id.txtTaille);
         txtAge = (EditText) findViewById(R.id.txtAge);
         rdHomme = (RadioButton) findViewById(R.id.rdHomme);
+        rdFemme = (RadioButton) findViewById(R.id.rdFemme);
         lblIMG = (TextView) findViewById(R.id.lblIMG);
         imgSmiley = (ImageView) findViewById(R.id.imgSmiley);
         btnCalc = (Button) findViewById(R.id.btnCalc);
-        controle = Controle.getInstance();
+        controle = Controle.getInstance(this);
         ecouteCalcul();
+        recupProfil();
     }
 
+    /**
+     * enregistre les événements sur les outils graphiques
+     */
     private void ecouteCalcul() {
         btnCalc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -82,26 +88,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * calcule l'img à partir des données du profil
+     * @param poids en kg
+     * @param taille en cm
+     * @param age en années
+     * @param sexe 0 pour femme, 1 pour homme
+     */
     private void retourneCalcul(Integer poids, Integer taille, Integer age, Integer sexe) {
-        controle.creerProfil(poids, taille, age, sexe);
+        controle.creerProfil(poids, taille, age, sexe, this);
         String message = controle.getMessage();
         float img = controle.getImg();
         switch (message) {
             case "trop maigre":
                 imgSmiley.setImageResource(R.drawable.maigre);
-                lblIMG.setText(String.format("%.01f", img) + ": IMG trop faible");
                 lblIMG.setTextColor(Color.RED);
                 break;
             case  "normal":
                 imgSmiley.setImageResource(R.drawable.normal);
-                lblIMG.setText(String.format("%.01f",img) + ": IMG normal");
                 lblIMG.setTextColor(Color.GREEN);
                 break;
             default:
                 imgSmiley.setImageResource(R.drawable.graisse);
-                lblIMG.setText(String.format("%.01f",img) + ": IMG trop élevé");
                 lblIMG.setTextColor(Color.RED);
                 break;
+        }
+        lblIMG.setText(String.format("%.01f",img) + ": IMG "+message);
+    }
+
+    /**
+     * Récupère les informations d'un profil et les affiche
+     */
+    private void recupProfil() {
+        if(controle.getTaille() != null) {
+            txtPoids.setText(""+controle.getPoids());
+            txtTaille.setText(""+controle.getTaille());
+            txtAge.setText(""+controle.getAge());
+            rdHomme.setChecked(controle.getSexe() == 1);
+            rdFemme.setChecked(controle.getSexe() == 0);
+            btnCalc.performClick();
         }
     }
 }
