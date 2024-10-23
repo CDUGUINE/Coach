@@ -3,39 +3,35 @@ package com.example.coach.controleur;
 import com.example.coach.modele.Profil;
 
 /**
- * Classe controleur
+ * Classe singleton Controle : répond aux attentes de l'activity
  */
 public final class Controle {
 
-    /**
-     * Instanciation d'un controleur et d'un profil
-     */
+    // instanciation d'un controleur et d'un profil
     private static Controle instance = null;
     private static Profil profil = null;
 
-    /**
-     * Constructeur
-     */
+    // constructeur
     private Controle() {
         super();
     }
 
     /**
-     * Singleton
-     * @return instance unique de la classe controleur
+     * Création d'une instance unique de la classe
+     * @return l'instance unique
      */
-    public static Controle getInstance() {
-        if(Controle.instance == null) {
-            Controle.instance = new Controle();
+    public final static Controle getInstance() {
+        if(instance == null) {
+            instance = new Controle();
         }
-        return Controle.instance;
+        return instance;
     }
 
     /**
-     * Création d'un profil
+     * Création du profil par rapport aux informations saisies
      * @param poids en kg
      * @param taille en cm
-     * @param age
+     * @param age en années
      * @param sexe 0 pour une femme, 1 pour un homme
      */
     public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe) {
@@ -43,8 +39,8 @@ public final class Controle {
     }
 
     /**
-     * Méthode pour obtenir l'img d'un profil
-     * @return img indice de masse graisseuse (%)
+     * getter sur le résultat du calcul de l'IMG pour le profil
+     * @return img du profil
      */
     public float getImg() {
         if(profil != null) {
@@ -56,8 +52,8 @@ public final class Controle {
     }
 
     /**
-     * Méthode pour obtenir le message correspondant à l'img
-     * @return message affiché à l'écran
+     * getter sur le message correspondant à l'img du profil
+     * @return message du profil
      */
     public String getMessage() {
         if(profil != null) {

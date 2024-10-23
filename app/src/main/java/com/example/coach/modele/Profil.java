@@ -2,8 +2,10 @@ package com.example.coach.modele;
 
 /**
  * Classe métier profil
+ * contient les informations du profil
  */
 public class Profil {
+
     // constantes
     private static final Integer minFemme = 15; // maigre si en dessous
     private static final Integer maxFemme = 30; // gros si au dessus
@@ -19,10 +21,10 @@ public class Profil {
     private String message = "";
 
     /**
-     * Constructeur
+     * Constructeur : valorise directement les proriétés poids, taille, age, sexe
      * @param poids en kg
      * @param taille en cm
-     * @param age
+     * @param age en années
      * @param sexe 0 pour une femme, 1 pour un homme
      */
     public Profil(Integer poids, Integer taille, Integer age, Integer sexe) {
@@ -66,11 +68,11 @@ public class Profil {
 
     /**
      * Méthode pour obtenir l'img d'un profil
-     * @return img indice de masse graisseuse (%)
+     * @return img du profil
      */
     public float getImg() {
         if(img == 0) {
-            float taillem = (float)(taille)/100;
+            float taillem = ((float)taille)/100;
             img = (float)(1.2*poids/(taillem*taillem)+(0.23*age)-(10.83*sexe)-5.4);
         }
         return img;
@@ -82,26 +84,17 @@ public class Profil {
      */
     public String getMessage() {
         if(message == "") {
-            img = getImg();
-            if(sexe == 0) {
-                if(img < minFemme) {
-                    message = "trop maigre";
-                } else if (img > maxFemme) {
-                    message = "trop de graisse";
-                }
-                else {
-                    message = "normal";
-                }
+            message = "normal";
+            Integer min = minFemme, max = maxFemme;
+            if(sexe == 1) {
+                min = minHomme;
+                max = maxHomme;
             }
-            else {
-                if(img < minHomme) {
-                    message = "trop maigre";
-                } else if (img > maxHomme) {
-                    message = "trop de graisse";
-                }
-                else {
-                    message = "normal";
-                }
+            img = getImg();
+            if(img < min) {
+                message = "trop maigre";
+            } else if (img > max) {
+                message = "trop de graisse";
             }
         }
         return message;
