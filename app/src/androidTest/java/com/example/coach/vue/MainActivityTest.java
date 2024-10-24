@@ -29,6 +29,7 @@ public class MainActivityTest {
         SystemClock.sleep(1000);
         onView(withId(R.id.txtAge)).perform(typeText("50"), closeSoftKeyboard());
         SystemClock.sleep(1000);
+        onView(withId(R.id.rdFemme)).perform(click());
         onView(withId(R.id.btnCalc)).perform(click());
         SystemClock.sleep(5000);
     }

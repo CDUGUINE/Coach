@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 imgSmiley.setImageResource(R.drawable.maigre);
                 lblIMG.setTextColor(Color.RED);
                 break;
-            case  "normal":
+            case "normal":
                 imgSmiley.setImageResource(R.drawable.normal);
                 lblIMG.setTextColor(Color.GREEN);
                 break;
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 lblIMG.setTextColor(Color.RED);
                 break;
         }
-        lblIMG.setText(String.format("%.01f",img) + ": IMG "+message);
+        lblIMG.setText(String.format("%.01f", img) + ": IMG "+message);
     }
 
     /**

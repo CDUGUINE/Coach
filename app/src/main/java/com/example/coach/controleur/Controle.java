@@ -2,8 +2,11 @@ package com.example.coach.controleur;
 
 import android.content.Context;
 
+import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
 import com.example.coach.outils.Serializer;
+
+import java.util.Date;
 
 /**
  * Classe singleton Controle : répond aux attentes de l'activity
@@ -11,52 +14,62 @@ import com.example.coach.outils.Serializer;
 public final class Controle {
 
     // instanciation d'un controleur et d'un profil
-    private static Controle instance = null;
+    private static Controle instance;
     private static Profil profil = null;
 
     // nom du fichier de sauvegarde
     private static String nomFic = "saveprofil";
 
-    // constructeur
+    private AccesLocal accessLocal; // static à ajouter ?
+
+    /**
+     * constructeur de la classe
+      */
     private Controle(Context context) {
-        recupSerialize(context);
+//        recupSerialize(context);
+        accessLocal = AccesLocal.getInstance(context);
+        profil = accessLocal.recupDernier();
     }
 
     /**
      * Création d'une instance unique de la classe
      * @return l'instance unique
      */
-    public static final Controle getInstance(Context context) {
+    public final static Controle getInstance(Context context) {
         if(instance == null) {
             instance = new Controle(context);
+            // ajout d'après vidéo
+            //accessLocal = new AccesLocal(context);
+            //profil = accessLocal.recupDernier();
         }
         return instance;
     }
 
     /**
      * Création du profil par rapport aux informations saisies
-     * @param poids en kg
+     *
+     * @param poids  en kg
      * @param taille en cm
-     * @param age en années
-     * @param sexe 0 pour une femme, 1 pour un homme
+     * @param age    en années
+     * @param sexe   0 pour une femme, 1 pour un homme
      */
     public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe, Context context) {
-        profil = new Profil(poids, taille, age, sexe);
-        Serializer.serialize(nomFic, profil, context);
+        profil = new Profil(new Date(), poids, taille, age, sexe);
+//        Serializer.serialize(nomFic, profil, context);
+        accessLocal.ajout(profil);
     }
 
     /**
      * getter sur le résultat du calcul de l'IMG pour le profil
      * @return img du profil
      */
-    public float getImg() {
-        if(profil != null) {
-            return profil.getImg();
+        public float getImg() {
+            if(profil != null) {
+                return profil.getImg();
+            }else{
+                return 0;
+            }
         }
-        else {
-            return 0;
-        }
-    }
 
     /**
      * getter sur le message correspondant à l'img du profil
@@ -65,8 +78,7 @@ public final class Controle {
     public String getMessage() {
         if(profil != null) {
             return profil.getMessage();
-        }
-        else {
+        }else{
             return "";
         }
     }
