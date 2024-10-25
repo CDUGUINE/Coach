@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.logging.SimpleFormatter;
 
 public abstract class MesOutils {
-    public static Date convertStringToDate(String uneDate) {
-        String expectedPattern = "EEE MMM dd hh:mm:ss 'GMT+00:00' yyyy";
+    public static Date convertStringToDate(String uneDate, String pattern) {
+        String expectedPattern = pattern;
         SimpleDateFormat formatter = new SimpleDateFormat(expectedPattern);
         try {
             Date date = formatter.parse(uneDate);

@@ -67,7 +67,7 @@ public class AccesLocal {
         Cursor curseur = bd.rawQuery(req, null);
         curseur.moveToLast();
         if(!curseur.isAfterLast()) {
-            Date dateMesure = MesOutils.convertStringToDate(curseur.getString(0));
+            Date dateMesure = MesOutils.convertStringToDate(curseur.getString(0), "EEE MMM dd hh:mm:ss 'GMT+00:00' yyyy");
             Log.d("date","********* date="+dateMesure);
             Integer poids = curseur.getInt(1);
             Integer taille = curseur.getInt(2);

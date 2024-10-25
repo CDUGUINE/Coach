@@ -1,5 +1,12 @@
 package com.example.coach.modele;
 
+import android.util.Log;
+
+import com.example.coach.outils.MesOutils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -94,7 +101,7 @@ public class Profil implements Serializable {
      * @return message affiché à l'écran
      */
     public String getMessage() {
-        if(message == "") {
+        if(message.equals("")) {
             message = "normal";
             Integer min = minFemme, max = maxFemme;
             if(sexe == 1) {
@@ -110,4 +117,19 @@ public class Profil implements Serializable {
         }
         return message;
     }
+
+    public JSONObject convertToJSONObject() {
+        JSONObject objet = new JSONObject();
+        try {
+            objet.put("datemesure", MesOutils.convertDateToString(dateMesure));
+            objet.put("poids", poids);
+            objet.put("taille", taille);
+            objet.put("age", age);
+            objet.put("sexe", sexe);
+        } catch (JSONException e) {
+            Log.d("erreur", "************ classe Profil, méthode convertToJSONObject, erreur de conversion");
+        }
+        return objet;
+    }
 }
+

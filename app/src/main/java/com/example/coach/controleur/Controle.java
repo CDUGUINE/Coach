@@ -2,9 +2,13 @@ package com.example.coach.controleur;
 
 import android.content.Context;
 
+import com.example.coach.modele.AccesDistant;
 import com.example.coach.modele.AccesLocal;
 import com.example.coach.modele.Profil;
 import com.example.coach.outils.Serializer;
+import com.example.coach.vue.MainActivity;
+
+import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -20,15 +24,21 @@ public final class Controle {
     // nom du fichier de sauvegarde
     private static String nomFic = "saveprofil";
 
-    private AccesLocal accessLocal; // static à ajouter ?
+//    private AccesLocal accessLocal;
+    private static AccesDistant accesDistant;
+    private static Context context;
+
 
     /**
      * constructeur de la classe
       */
     private Controle(Context context) {
 //        recupSerialize(context);
-        accessLocal = AccesLocal.getInstance(context);
-        profil = accessLocal.recupDernier();
+//        accessLocal = AccesLocal.getInstance(context);
+//        profil = accessLocal.recupDernier();
+        if(context != null) {
+            Controle.context = context;
+        }
     }
 
     /**
@@ -38,6 +48,8 @@ public final class Controle {
     public final static Controle getInstance(Context context) {
         if(instance == null) {
             instance = new Controle(context);
+            accesDistant = AccesDistant.getInstance();
+            accesDistant.envoi("dernier", new JSONObject());
             // ajout d'après vidéo
             //accessLocal = new AccesLocal(context);
             //profil = accessLocal.recupDernier();
@@ -47,18 +59,22 @@ public final class Controle {
 
     /**
      * Création du profil par rapport aux informations saisies
-     *
      * @param poids  en kg
      * @param taille en cm
      * @param age    en années
      * @param sexe   0 pour une femme, 1 pour un homme
      */
-    public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe, Context context) {
+    public void creerProfil(Integer poids, Integer taille, Integer age, Integer sexe) {
         profil = new Profil(new Date(), poids, taille, age, sexe);
 //        Serializer.serialize(nomFic, profil, context);
-        accessLocal.ajout(profil);
+//        accessLocal.ajout(profil);
+        accesDistant.envoi("enreg", profil.convertToJSONObject());
     }
 
+    public void setProfil(Profil profil) {
+        this.profil = profil;
+        ((MainActivity)context).recupProfil();
+    }
     /**
      * getter sur le résultat du calcul de l'IMG pour le profil
      * @return img du profil
