@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import com.example.coach.outils.MesOutils;
 import com.example.coach.outils.MySQLiteOpenHelper;
-
 import java.util.Date;
 
 public class AccesLocal {
@@ -67,7 +65,7 @@ public class AccesLocal {
         Cursor curseur = bd.rawQuery(req, null);
         curseur.moveToLast();
         if(!curseur.isAfterLast()) {
-            Date dateMesure = MesOutils.convertStringToDate(curseur.getString(0), "EEE MMM dd hh:mm:ss 'GMT+00:00' yyyy");
+            Date dateMesure = MesOutils.convertStringToDate(curseur.getString(0));
             Log.d("date","********* date="+dateMesure);
             Integer poids = curseur.getInt(1);
             Integer taille = curseur.getInt(2);

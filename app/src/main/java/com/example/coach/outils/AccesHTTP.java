@@ -17,7 +17,7 @@ public class AccesHTTP extends AsyncTask<String, Integer, Long> {
 
 	// propriétés
 	public String ret=""; // information retournée par le serveur
-	public AsyncResponse delegate=null; // gestion du retour asynchrone
+	public AsyncResponse delegate = null; // gestion du retour asynchrone
 	private String parametres = ""; // paramètres à envoyer en POST au serveur
 
 	/**

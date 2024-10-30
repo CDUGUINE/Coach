@@ -3,11 +3,15 @@ package com.example.coach.outils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.SimpleFormatter;
 
 public abstract class MesOutils {
-    public static Date convertStringToDate(String uneDate, String pattern) {
-        String expectedPattern = pattern;
+    /**
+     * Conversion d'une date du format String vers le format Date avec un format reçu
+     * @param uneDate au format String
+     * @param expectedPattern
+     * @return la date au format date
+     */
+    public static Date convertStringToDate(String uneDate, String expectedPattern) {
         SimpleDateFormat formatter = new SimpleDateFormat(expectedPattern);
         try {
             Date date = formatter.parse(uneDate);
@@ -18,8 +22,26 @@ public abstract class MesOutils {
         return null;
     }
 
+    /**
+     * Conversion d'une date du format String vers le format Date avec un format précis
+     * @param uneDate au format String
+     * @return la date au format date
+     */
+    public static Date convertStringToDate(String uneDate){
+        return convertStringToDate(uneDate, "EEE MMM dd hh:mm:ss 'GMT+00:00' yyyy");
+    }
+
+    /**
+     * Conversion d'une date du format Date vers le format String
+     * @param uneDate au format Date
+     * @return la date au format String
+     */
     public static String convertDateToString(Date uneDate) {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return date.format(uneDate);
+    }
+
+    public static String format2Decimal(Float unNombre) {
+        return String.format("%.01f", unNombre);
     }
 }

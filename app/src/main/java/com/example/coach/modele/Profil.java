@@ -3,10 +3,8 @@ package com.example.coach.modele;
 import android.util.Log;
 
 import com.example.coach.outils.MesOutils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,7 +12,7 @@ import java.util.Date;
  * Classe métier profil
  * contient les informations du profil
  */
-public class Profil implements Serializable {
+public class Profil implements Serializable, Comparable {
 
     // constantes
     private static final Integer minFemme = 15; // maigre si en dessous
@@ -22,14 +20,14 @@ public class Profil implements Serializable {
     private static final Integer minHomme = 10; // maigre si en dessous
     private static final Integer maxHomme = 25; // gros si au dessus
 
-    // variables
     private Integer poids;
     private Integer taille;
     private Integer age;
     private Integer sexe;
+
+    private Date dateMesure;
     private float img = 0;
     private String message = "";
-    private Date dateMesure;
 
     /**
      * Constructeur : valorise directement les proriétés poids, taille, age, sexe
@@ -46,43 +44,25 @@ public class Profil implements Serializable {
         this.sexe = sexe;
     }
 
-    /**
-     * retourne le poids du profil
-     * @return poids en kg
-     */
     public Integer getPoids() {
         return poids;
     }
 
-    /**
-     * retourne la taille du profil
-     * @return taille en cm
-     */
     public Integer getTaille() {
         return taille;
     }
 
-    /**
-     * retourne l'âge du profil
-     * @return age
-     */
     public Integer getAge() {
         return age;
     }
 
-    /**
-     * retourne le sexe du profil
-     * @return sexe (0 pour une femme, 1 pour un homme)
-     */
     public Integer getSexe() {
         return sexe;
     }
 
-    /**
-     * retourne la date du profil
-     * @return date de la mesure
-     */
-    public Date getDateMesure() { return dateMesure; }
+    public Date getDateMesure() {
+        return dateMesure;
+    }
 
     /**
      * Méthode pour obtenir l'img d'un profil
@@ -111,25 +91,41 @@ public class Profil implements Serializable {
             img = getImg();
             if(img < min) {
                 message = "trop maigre";
-            } else if (img > max) {
-                message = "trop de graisse";
+            }else{
+                if (img > max) {
+                    message = "trop de graisse";
+                }
             }
         }
         return message;
     }
 
+    /**
+     * conversion du profil au format JSONObject
+     * @return
+     */
     public JSONObject convertToJSONObject() {
-        JSONObject objet = new JSONObject();
+        JSONObject jsonProfil = new JSONObject();
         try {
-            objet.put("datemesure", MesOutils.convertDateToString(dateMesure));
-            objet.put("poids", poids);
-            objet.put("taille", taille);
-            objet.put("age", age);
-            objet.put("sexe", sexe);
+            jsonProfil.put("datemesure", MesOutils.convertDateToString(dateMesure));
+            jsonProfil.put("poids", poids);
+            jsonProfil.put("taille", taille);
+            jsonProfil.put("age", age);
+            jsonProfil.put("sexe", sexe);
         } catch (JSONException e) {
             Log.d("erreur", "************ classe Profil, méthode convertToJSONObject, erreur de conversion");
         }
-        return objet;
+        return jsonProfil;
+    }
+
+    /**
+     * Comparaison des profils sur dateMesure
+     * @param o
+     * @return le résultat de la comparaison
+     */
+    @Override
+    public int compareTo(Object o) {
+        return dateMesure.compareTo(((Profil)o).getDateMesure());
     }
 }
 
